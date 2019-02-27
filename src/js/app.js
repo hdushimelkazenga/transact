@@ -14,7 +14,7 @@ App = {
       App.web3Provider = web3.currentProvider;
       web3 = new Web3(web3.currentProvider);
     } else {
-      // Specify default instance if no web3 instance provided
+      
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
       web3 = new Web3(App.web3Provider);
     }
@@ -23,9 +23,7 @@ App = {
 
   initContract: function() {
     $.getJSON("Transact.json", function(transact) {
-      // Instantiate a new truffle contract from the artifact
       App.contracts.Transact = TruffleContract(transact);
-      // Connect provider to interact with contract
       App.contracts.Transact.setProvider(App.web3Provider);
       App.listenForEvents();
 
@@ -55,7 +53,7 @@ App.contracts.Transact.deployed().then(function(instance){
     loader.show();
     content.hide();
 
-    // Load account data
+    
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
 
@@ -64,7 +62,7 @@ App.contracts.Transact.deployed().then(function(instance){
       }
     });
 
-    // Load contract data
+    
     App.contracts.Transact.deployed().then(function(instance) {
       transactInstance = instance;
       var transactionRecord= $("#transactionRecord");
@@ -83,11 +81,10 @@ App.contracts.Transact.deployed().then(function(instance){
           var ln = l[3];
           var o = l[4];
           
-          // Render candidate Result
+          
           var record = "<tr><th>" + id + "</th><td>" + prv + "</td><td>" + dst + "</td><td>" + ln + "</td><td>" + o +"</td></tr>"
 
           transactionRecord.append(record);
-          // dropdown selection
           var landSelected = "<option value='" + id + "'>" + ln + "</ option>"
           landselect.append(landSelected);
         });
