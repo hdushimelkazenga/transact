@@ -23,7 +23,9 @@ App = {
 
   initContract: function() {
     $.getJSON("Transact.json", function(transact) {
+      
       App.contracts.Transact = TruffleContract(transact);
+      
       App.contracts.Transact.setProvider(App.web3Provider);
       App.listenForEvents();
 
@@ -56,7 +58,6 @@ App.contracts.Transact.deployed().then(function(instance){
     
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
-
         App.account = account;
         $("#accountAddress").html("Your Account: " + account);
       }
@@ -65,26 +66,28 @@ App.contracts.Transact.deployed().then(function(instance){
     
     App.contracts.Transact.deployed().then(function(instance) {
       transactInstance = instance;
+      return transactInstance.k();
+    }).then(function(k) {
       var transactionRecord= $("#transactionRecord");
       transactionRecord.empty();
       var landselect = $("#lNSelect");
       landselect.empty();
-      return transactInstance.k();
-    }).then(function(k) {
-      
       for (var i = 0; i <10;i++) {
         transactInstance.lands(i).then(function(l) {
-
           var id = l[0];
           var prv = l[1];
           var dst = l[2];
           var ln = l[3];
           var o = l[4];
-          
+          if(i == 0)
+          {
+            if(transactionRecord.children().length != 0)
+              {transactionRecord.empty();}
+          }    
           
           var record = "<tr><th>" + id + "</th><td>" + prv + "</td><td>" + dst + "</td><td>" + ln + "</td><td>" + o +"</td></tr>"
-
           transactionRecord.append(record);
+          
           var landSelected = "<option value='" + id + "'>" + ln + "</ option>"
           landselect.append(landSelected);
         });
